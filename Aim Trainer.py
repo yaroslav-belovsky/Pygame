@@ -13,6 +13,7 @@ score_text = font.render("влучань: 0", True, (0, 0, 0)) # Створює�
 font = pygame.font.SysFont("Arial", 30) # Створюємо шрифт Arial розміру 30
 score_p_text = font.render("промахів: 0", True, (0, 0, 0)) # Створюємо зображення тексту чорного кольору
 dabl_text = font.render("", True, (0, 0, 0))
+
 promahiv = 0
 dabl = 0
 score = 0
@@ -33,6 +34,10 @@ MOVE_INTERVAL = 1000 # Інтервал у мілісекундах
 
 # Основний цикл гри
 running = True
+start_time = pygame.time.get_ticks()
+
+def generator():
+    return (random.randint(1, 450), random.randint(1, 450))
 
 while running:
 
@@ -82,9 +87,15 @@ while running:
         x, y = (random.randint(50, WIDTH - 50),
                 random.randint(50, HEIGHT - 50))
         last_move_time = current_time
+    elapsed_time = (current_time - start_time) // 1000  # Рахуємо, скільки секунд гри минуло
+    time_text = font.render(f"Час: {elapsed_time} с", True, (0, 0, 0))  # Перетворюємо текст на картинку
+
 
     # Очищаємо екран і малюємо нову фігурку
     screen.fill(WHITE)
+    screen.fill((146, 101, 0))
+    radius = 30
+    pygame.draw.rect(screen, (255, 130, 0), (0, 0, 400, 100), border_radius=radius)
     if color == "GREEN":
         pygame.draw.rect(screen, (255, 0, 0), (0, 0, 500, 500))
         pygame.draw.rect(screen, (255, 250, 250), (50, 50, 400, 400), 50)
@@ -94,10 +105,13 @@ while running:
         pygame.draw.rect(screen, (255, 250, 250), (235, 235, 30, 30), 10)
         pygame.draw.rect(screen, (255, 130, 0), (200, 450, 100, 40))
         screen.blit(dabl_text, (250, 450))  # Малюємо текст у верхньому лівому куті
+    cord = generator()
+    pygame.draw.rect(screen, (255, 0, 0), (cord[0],cord[1],cord[0],cord[1]))
     pygame.draw.circle(screen, color, (x, y), RADIUS)
     pygame.draw.circle(screen, (255,255,255), (x, y), 15, 10)
     screen.blit(score_text, (10, 10))  # Малюємо текст у верхньому лівому куті
     screen.blit(score_p_text, (200, 10))  # Малюємо текст у верхньому лівому куті
+    screen.blit(time_text, (10, 40))  # Відображаємо створену картинку на
     pygame.display.flip() # Оновлюємо екран
 
 
